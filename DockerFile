@@ -1,0 +1,8 @@
+FROM openjdk:17
+LABEL authors="dungnx"
+WORKDIR /opt
+ENV PORT 8080
+EXPOSE 8080
+COPY target/*.jar /opt/app.jar
+ENTRYPOINT excec  java $JAVA_OPTS -jar app.jar
+
