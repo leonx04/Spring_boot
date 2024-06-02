@@ -128,14 +128,7 @@
           style="max-width: 400px; width: 100%; padding: 20px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(17, 12, 12, 0.1); backdrop-filter: blur(5px);">
           <form action="store" method="post">
             <h2 class="text-center mt-2">Thêm mới sản phẩm</h2>
-            <div class="mt-2">
-              <label class="form-lablel">ID sản phẩm</label>
-              <input type="text" class="form-control" placeholder="Vui lòng nhập ID sản phẩm" name="id"
-                value="${data.id}" />
-              <c:if test="${not empty errors['id']}">
-                <small class="alert alert-danger mt-2 text-center">${errors['id']}</small>
-              </c:if>
-            </div>
+
             <div class="mt-2">
               <label class="form-lablel">Mã sản phẩm</label>
               <input type="text" class="form-control" placeholder="Vui lòng nhập mã sản phẩm" name="ma"

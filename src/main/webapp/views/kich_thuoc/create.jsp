@@ -138,14 +138,6 @@
 
           <form action="store" method="post">
             <h2 class="text-center mt-2">Thêm mới kích thước</h2>
-            <div class="mt-2">
-              <label class="form-lablel">ID kích thước</label>
-              <input type="text" class="form-control" placeholder="Vui lòng nhập ID kích thước" name="id"
-                value="${data.id}" />
-              <c:if test="${not empty errors['id']}">
-                <small class="alert alert-danger mt-2 text-center">${errors['id']}</small>
-              </c:if>
-            </div>
 
             <div class="mt-2">
               <label class="form-lablel">Mã kích thước</label>

@@ -1,6 +1,6 @@
-<%@page pageEncoding="UTF-8" language="java" %>
-    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-        <%@ taglib prefix="f" uri="jakarta.tags.functions" %>
+<%@page language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <html>
 
             <head>
@@ -135,87 +135,98 @@
                 </nav>
                 <div class="container">
                     <div class="border border-1 rounded p-3 mt-4">
-                        <h2 class="text-center mt-2">Danh sách hóa đơn</h2>
+                        <h2 class="text-center mt-2">Danh sách hóa đơn chi tiết</h2>
                         <div class="mt-2">
                             <div class="mt-2 w-25">
-                                <form action="/hoa-don-chi-tiet/index" method="get"
-                                    class="d-flex justify-content-between">
+                                <form action="/hoa-don-chi-tiet/index" method="get" class="d-flex justify-content-between">
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control" name="hd" placeholder="Nhập ID hóa đơn"
-                                            value="${keyword}">
+                                        <input type="text" class="form-control" name="idHoaDon" placeholder="Nhập ID hóa đơn" value="${idHoaDon}">
                                         <button class="btn btn-primary" type="submit">Tìm kiếm</button>
                                     </div>
                                 </form>
                             </div>
                             <table class="mt-2 table table-bordered table-hover">
                                 <thead>
-                                    <tr class="table-bordered table-dark">
-                                        <th>STT</th>
-                                        <th>ID</th>
-                                        <th>ID Hóa đơn</th>
-                                        <th>ID Sản phẩm chi tiết</th>
-                                        <th>Số lượng</th>
-                                        <th>Đơn giá</th>
-                                        <th>Trạng thái</th>
-                                        <th colspan="2">Tương tác</th>
-                                    </tr>
+                                <tr class="table-bordered table-dark">
+                                    <th>STT</th>
+                                    <th>ID</th>
+                                    <th>ID Hóa đơn</th>
+                                    <th>ID Sản phẩm chi tiết</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn giá</th>
+                                    <th>Thời gian</th>
+                                    <th>Trạng thái</th>
+                                    <th>Tương tác</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach items="${data}" var="hoaDonChiTiet" varStatus="items">
-                                        <tr>
-                                            <td>${items.index + 1}</td>
-                                            <td>${hoaDonChiTiet.id}</td>
-                                            <td>${hoaDonChiTiet.idHD}</td>
-                                            <td>${hoaDonChiTiet.idSPCT}</td>
-                                            <td>${hoaDonChiTiet.soLuong}</td>
-                                            <td>${hoaDonChiTiet.donGia}</td>
-                                            <td>${hoaDonChiTiet.trangThai == 1 ? "Đã thanh toán" : "Chưa thanh toán"}
-                                            </td>
-                                            <td class="text-nowrap">
-                                                <a href="/hoa-don-chi-tiet/edit/${hoaDonChiTiet.id}"
-                                                    class="btn btn-warning">Sửa</a>
-                                                <!-- <a href="/hoa-don-chi-tiet/delete/${hoaDonChiTiet.id}"
-                                                    class="btn btn-danger">Xoá</a> -->
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
+                                <c:forEach items="${data.content}" var="hdct" varStatus="loop">
+                                    <tr>
+                                        <td>${loop.index + 1}</td>
+                                        <td>${hdct.id}</td>
+                                        <td>${hdct.idHD}</td>
+                                        <td>${hdct.idSPCT}</td>
+                                        <td>${hdct.soLuong}</td>
+<%--                                        <td>${hdct.donGia}</td>--%>
+                                        <td><fmt:formatNumber value="${hdct.donGia}" type="currency" currencySymbol="đ" maxFractionDigits="0"/></td>
+                                        <td>${hdct.thoiGian}</td>
+                                        <td class="${hdct.trangThai == 1 ? 'text-success' : 'text-danger'}">
+                                                ${hdct.trangThai == 1 ? "Đã thanh toán" : "Chưa thanh toán"}
+                                        </td>
+                                        <td>
+                                            <a href="/hoa-don-chi-tiet/edit/${hdct.id}" class="btn btn-warning">Sửa</a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
                             <c:if test="${not empty message}">
                                 <div class="alert alert-warning" role="alert">
-                                    ${message}
+                                        ${message}
                                 </div>
                             </c:if>
-                            <!-- Phân trang -->
+                            <!-- Pagination -->
                             <nav aria-label="Page navigation">
                                 <ul class="pagination justify-content-center">
-                                    <c:if test="${currentPage > 1}">
+                                    <li class="page-item ${data.number == 0 ? 'disabled' : ''}">
+                                        <a class="page-link" href="/hoa-don-chi-tiet/index?page=${data.number}&limit=${data.size}&idHoaDon=${idHoaDon}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item ${data.number == 0 ? 'disabled' : ''}">
+                                        <a class="page-link" href="/hoa-don-chi-tiet/index?page=1&limit=${data.size}&idHoaDon=${idHoaDon}" aria-label="First">
+                                            Trang đầu
+                                        </a>
+                                    </li>
+                                    <c:if test="${data.number > 2}">
+                                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                                    </c:if>
+                                    <c:if test="${data.number > 0}">
                                         <li class="page-item">
-                                            <a class="page-link"
-                                                href="/hoa-don-chi-tiet/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${currentPage - 1}">Previous</a>
+                                            <a class="page-link" href="/hoa-don-chi-tiet/index?page=${data.number}&limit=${data.size}&idHoaDon=${idHoaDon}">${data.number}</a>
                                         </li>
                                     </c:if>
-
-                                    <c:forEach begin="1" end="${totalPages}" var="i">
-                                        <c:choose>
-                                            <c:when test="${currentPage == i}">
-                                                <li class="page-item active"><a class="page-link">${i}</a></li>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <li class="page-item">
-                                                    <a class="page-link"
-                                                        href="/hoa-don-chi-tiet/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${i}">${i}</a>
-                                                </li>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-
-                                    <c:if test="${currentPage < totalPages}">
+                                    <li class="page-item active">
+                                        <a class="page-link">${data.number + 1}</a>
+                                    </li>
+                                    <c:if test="${data.number + 1 < data.totalPages}">
                                         <li class="page-item">
-                                            <a class="page-link"
-                                                href="/hoa-don-chi-tiet/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${currentPage + 1}">Next</a>
+                                            <a class="page-link" href="/hoa-don-chi-tiet/index?page=${data.number + 2}&limit=${data.size}&idHoaDon=${idHoaDon}">${data.number + 2}</a>
                                         </li>
                                     </c:if>
+                                    <c:if test="${data.number < data.totalPages - 3}">
+                                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                                    </c:if>
+                                    <li class="page-item ${data.number == data.totalPages - 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="/hoa-don-chi-tiet/index?page=${data.totalPages}&limit=${data.size}&idHoaDon=${idHoaDon}" aria-label="Last">
+                                            Trang cuối
+                                        </a>
+                                    </li>
+                                    <li class="page-item ${data.number == data.totalPages - 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="/hoa-don-chi-tiet/index?page=${data.number + 2}&limit=${data.size}&idHoaDon=${idHoaDon}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>

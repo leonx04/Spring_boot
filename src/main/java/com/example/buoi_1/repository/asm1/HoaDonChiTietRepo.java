@@ -10,11 +10,11 @@ import com.example.buoi_1.entity.HoaDonChiTietEntity;
 public class HoaDonChiTietRepo {
     private List<HoaDonChiTietEntity> dshd;
 
-    public HoaDonChiTietRepo() {
-        this.dshd = new ArrayList<>();
-        this.dshd.add(new HoaDonChiTietEntity(1, 1, 1, 2, new BigDecimal(20000), 1));
-        this.dshd.add(new HoaDonChiTietEntity(2, 2, 2, 3, new BigDecimal(30000), 0));
-    }
+//    public HoaDonChiTietRepo() {
+//        this.dshd = new ArrayList<>();
+//        this.dshd.add(new HoaDonChiTietEntity(1, 1, 1, 2, new BigDecimal(20000), 1));
+//        this.dshd.add(new HoaDonChiTietEntity(2, 2, 2, 3, new BigDecimal(30000), 0));
+//    }
 
     public List<HoaDonChiTietEntity> findAllPaging(int page, int pageSize) {
         int start = (page - 1) * pageSize;

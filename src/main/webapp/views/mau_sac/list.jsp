@@ -150,15 +150,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <c:forEach items="${data}" var="mauSac" varStatus="items">
+                  <c:forEach items="${data.content}" var="mauSac" varStatus="items">
                     <tr>
                       <td>${items.index + 1}</td>
                       <td>${mauSac.id}</td>
                       <td>${mauSac.ma}</td>
                       <td>${mauSac.ten}</td>
-                      <td>
-                        ${mauSac.trangThai == 1 ? "Dang hoat dong" : "Ngung hoat
-                        dong"}
+                      <td class="${mauSac.trangThai == 1 ? 'text-success' : 'text-danger'}">
+                          ${mauSac.trangThai == 1 ? "Đang hoạt động" : "Ngừng hoạt động"}
                       </td>
                       <td class="text-nowrap">
                         <a href="/mau-sac/edit/${mauSac.id}" class="btn btn-warning">Sửa</a>
@@ -171,33 +170,52 @@
               <!-- Phân trang -->
               <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
+                  <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="/mau-sac/search?page=${currentPage - 1}&limit=${data.size}&keyword=${keyword}" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="/mau-sac/search?page=1&limit=${data.size}&keyword=${keyword}" aria-label="First">
+                      Trang đầu
+                    </a>
+                  </li>
+
+                  <c:if test="${currentPage > 3}">
+                    <li class="page-item disabled"><a class="page-link">...</a></li>
+                  </c:if>
+
                   <c:if test="${currentPage > 1}">
                     <li class="page-item">
-                      <a class="page-link"
-                        href="/mau-sac/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${currentPage - 1}">Previous</a>
+                      <a class="page-link" href="/mau-sac/search?page=${currentPage - 1}&limit=${data.size}&keyword=${keyword}">${currentPage - 1}</a>
                     </li>
                   </c:if>
 
-                  <c:forEach begin="1" end="${totalPages}" var="i">
-                    <c:choose>
-                      <c:when test="${currentPage == i}">
-                        <li class="page-item active"><a class="page-link">${i}</a></li>
-                      </c:when>
-                      <c:otherwise>
-                        <li class="page-item">
-                          <a class="page-link"
-                            href="/mau-sac/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${i}">${i}</a>
-                        </li>
-                      </c:otherwise>
-                    </c:choose>
-                  </c:forEach>
+                  <li class="page-item active">
+                    <a class="page-link">${currentPage}</a>
+                  </li>
 
                   <c:if test="${currentPage < totalPages}">
                     <li class="page-item">
-                      <a class="page-link"
-                        href="/mau-sac/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${currentPage + 1}">Next</a>
+                      <a class="page-link" href="/mau-sac/search?page=${currentPage + 1}&limit=${data.size}&keyword=${keyword}">${currentPage + 1}</a>
                     </li>
                   </c:if>
+
+                  <c:if test="${currentPage < totalPages - 2}">
+                    <li class="page-item disabled"><a class="page-link">...</a></li>
+                  </c:if>
+
+                  <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="/mau-sac/search?page=${totalPages}&limit=${data.size}&keyword=${keyword}" aria-label="Last">
+                      Trang cuối
+                    </a>
+                  </li>
+
+                  <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="/mau-sac/search?page=${currentPage + 1}&limit=${data.size}&keyword=${keyword}" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
                 </ul>
               </nav>
             </div>

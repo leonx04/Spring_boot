@@ -137,14 +137,27 @@
                     <div class="border border-1 rounded p-3 mt-4">
                         <h2 class="text-center mt-2">Danh sách hóa đơn</h2>
                         <div class="mt-2">
-                            <div class="mt-2 w-25">
-                                <!-- Thêm form tìm kiếm -->
-                                <form action="/hoa-don/search" method="GET" class="mb-3">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" name="keyword"
-                                            placeholder="Nhập ngày mua hàng">
-                                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                            <div class="mt-2 mb-2 row d-flex " style="max-width: 400px;">
+                                <form action="/hoa-don/index" method="get">
+                                    <div class="col-6">
+                                        <label class="form-label text-light">Chọn nhân viên</label>
+                                        <select name="idNhanVien" class="form-control">
+                                            <option value="">Tất cả</option>
+                                            <c:forEach items="${nv}" var="nv">
+                                                <option value="${nv.id}" ${idNhanVien == nv.id ? 'selected' : ''}>${nv.ten}</option>
+                                            </c:forEach>
+                                        </select>
                                     </div>
+                                    <div class="col-6">
+                                        <label class="form-label mt-2 text-light">Chọn khách hàng</label>
+                                        <select name="idKhachHang" class="form-control">
+                                            <option value="">Tất cả</option>
+                                            <c:forEach items="${kh}" var="kh">
+                                                <option value="${kh.id}" ${idKhachHang == kh.id ? 'selected' : ''}>${kh.ten}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mt-2">Tìm kiếm</button>
                                 </form>
                             </div>
                             <table class="mt-2 table table-bordered table-hover">
@@ -160,14 +173,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach items="${data}" var="hoaDon" varStatus="items">
+                                    <c:forEach items="${data.content}" var="hoaDon" varStatus="items">
                                         <tr>
                                             <td>${items.index + 1}</td>
                                             <td>${hoaDon.id}</td>
-                                            <td>${hoaDon.nhanVien}</td>
-                                            <td>${hoaDon.khachHang}</td>
+                                            <td>${hoaDon.nhanVien.ten}</td>
+                                            <td>${hoaDon.khachHang.ten}</td>
                                             <td>${hoaDon.ngayMua}</td>
-                                            <td>${hoaDon.trangThai == 1 ? "Đã thanh toán" : "Chưa thanh toán"}</td>
+                                            <td class="${hoaDon.trangThai == 1 ? 'text-success' : 'text-danger'}">${hoaDon.trangThai == 1 ? "Đã thanh toán" : "Chưa thanh toán"}</td>
                                             <td class="text-nowrap">
                                                 <a href="/hoa-don/edit/${hoaDon.id}" class="btn btn-warning">Sửa</a>
                                                 <!-- <a href="/hoa-don/delete/${hoaDon.id}" class="btn btn-danger">Xoá</a> -->
@@ -179,33 +192,45 @@
                             <!-- Phân trang -->
                             <nav aria-label="Page navigation">
                                 <ul class="pagination justify-content-center">
+                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="/hoa-don/index?page=${currentPage - 1}&limit=${data.size}&idNhanVien=${idNhanVien}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="/hoa-don/index?page=1&limit=${data.size}&idNhanVien=${idNhanVien}" aria-label="First">
+                                            Trang đầu
+                                        </a>
+                                    </li>
+                                    <c:if test="${currentPage > 2}">
+                                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                                    </c:if>
                                     <c:if test="${currentPage > 1}">
                                         <li class="page-item">
-                                            <a class="page-link"
-                                                href="/hoa-don/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${currentPage - 1}">Previous</a>
+                                            <a class="page-link" href="/hoa-don/index?page=${currentPage - 1}&limit=${data.size}&idNhanVien=${idNhanVien}">${currentPage - 1}</a>
                                         </li>
                                     </c:if>
-
-                                    <c:forEach begin="1" end="${totalPages}" var="i">
-                                        <c:choose>
-                                            <c:when test="${currentPage == i}">
-                                                <li class="page-item active"><a class="page-link">${i}</a></li>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <li class="page-item">
-                                                    <a class="page-link"
-                                                        href="/hoa-don/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${i}">${i}</a>
-                                                </li>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-
+                                    <li class="page-item active">
+                                        <a class="page-link">${currentPage}</a>
+                                    </li>
                                     <c:if test="${currentPage < totalPages}">
                                         <li class="page-item">
-                                            <a class="page-link"
-                                                href="/hoa-don/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${currentPage + 1}">Next</a>
+                                            <a class="page-link" href="/hoa-don/index?page=${currentPage + 1}&limit=${data.size}&idNhanVien=${idNhanVien}">${currentPage + 1}</a>
                                         </li>
                                     </c:if>
+                                    <c:if test="${currentPage < totalPages - 1}">
+                                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                                    </c:if>
+                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                        <a class="page-link" href="/hoa-don/index?page=${totalPages}&limit=${data.size}&idNhanVien=${idNhanVien}" aria-label="Last">
+                                            Trang cuối
+                                        </a>
+                                    </li>
+                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                        <a class="page-link" href="/hoa-don/index?page=${currentPage + 1}&limit=${data.size}&idNhanVien=${idNhanVien}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>

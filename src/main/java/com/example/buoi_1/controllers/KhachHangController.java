@@ -1,43 +1,38 @@
 package com.example.buoi_1.controllers;
 
+import com.example.buoi_1.entity.KhachHangEntity;
+import com.example.buoi_1.repository.asm2.KhachHangRepo;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import com.example.buoi_1.entity.KhachHangEntity;
-import com.example.buoi_1.repository.asm1.KhachHangRepo;
-
-import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("khach-hang")
 public class KhachHangController {
+    @Autowired
     private KhachHangRepo khRepo;
 
-    public KhachHangController() {
-        this.khRepo = new KhachHangRepo();
-    }
-
     @GetMapping("/index")
-    public String index(@RequestParam(defaultValue = "1") int page, Model model) {
-        int pageSize = 2;
-        List<KhachHangEntity> ds = this.khRepo.findAllPaging(page, pageSize);
-        int totalPages = this.khRepo.getTotalPages(pageSize);
+    public String index(@RequestParam(name = "limit", defaultValue = "10") int pageSize,
+                        @RequestParam(name = "page", defaultValue = "1") int pageNumber, Model model) {
+        Pageable p = PageRequest.of(pageNumber - 1, pageSize);
+        Page<KhachHangEntity> page = this.khRepo.findAll(p);
 
-        model.addAttribute("data", ds);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("data", page);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", page.getTotalPages());
+
         return "khach_hang/list";
     }
 
@@ -47,17 +42,17 @@ public class KhachHangController {
     }
 
     @PostMapping("/store")
-    public String store(@Valid @ModelAttribute("data") KhachHangEntity khachHangEntity, BindingResult bindingResult,
-            Model model) {
-        if (bindingResult.hasErrors()) {
+    public String store(Model model, @Valid KhachHangEntity khachHangEntity, BindingResult validate) {
+        if (validate.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
+            for (FieldError e : validate.getFieldErrors()) {
+                errors.put(e.getField(), e.getDefaultMessage());
             }
+            model.addAttribute("data", khachHangEntity);
             model.addAttribute("errors", errors);
             return "khach_hang/create";
         }
-        this.khRepo.create(khachHangEntity);
+        this.khRepo.save(khachHangEntity);
         return "redirect:/khach-hang/index";
     }
 
@@ -69,40 +64,70 @@ public class KhachHangController {
 
     @GetMapping("edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
-        KhachHangEntity kh = this.khRepo.findById(id);
+        KhachHangEntity kh = this.khRepo.findById(id).get();
         model.addAttribute("data", kh);
         return "khach_hang/edit";
     }
 
     @PostMapping("update/{id}")
-    public String update(@PathVariable("id") Integer id, @Valid @ModelAttribute("data") KhachHangEntity khachHangEntity,
-            BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
+    public String update(@PathVariable("id") Integer id, @Valid KhachHangEntity kh, BindingResult validate, Model model) {
+        if (validate.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
+            for (FieldError e : validate.getFieldErrors()) {
+                errors.put(e.getField(), e.getDefaultMessage());
             }
+            model.addAttribute("data", kh);
             model.addAttribute("errors", errors);
             return "khach_hang/edit";
         }
 
-        this.khRepo.update(khachHangEntity);
+        this.khRepo.save(kh);
         return "redirect:/khach-hang/index";
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam("keyword") String keyword,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "2") int pageSize,
-            Model model) {
-        List<KhachHangEntity> result = this.khRepo.findByTenPaging(keyword, page, pageSize);
-        int totalProducts = this.khRepo.getTotalProductsByTen(keyword);
-        int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+    public String search(@RequestParam(defaultValue = "") String keyword,
+                         @RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "10") int size,
+                         Model model) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<KhachHangEntity> result;
+
+        if (keyword.isEmpty()) {
+            result = khRepo.findAll(pageable);
+        } else {
+            result = khRepo.findByTenContainingIgnoreCase(keyword, pageable);
+        }
 
         model.addAttribute("data", result);
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalPages", result.getTotalPages());
         model.addAttribute("keyword", keyword);
+
         return "khach_hang/list";
     }
+
+    @GetMapping("/sort")
+    public String sort(@RequestParam(defaultValue = "id,asc") String[] sort,
+                       @RequestParam(defaultValue = "") String keyword,
+                       @RequestParam(defaultValue = "1") int page,
+                       @RequestParam(defaultValue = "10") int size,
+                       Model model) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort));
+        Page<KhachHangEntity> result;
+
+        if (keyword.isEmpty()) {
+            result = khRepo.findAll(pageable);
+        } else {
+            result = khRepo.findByTenContainingIgnoreCase(keyword, pageable);
+        }
+
+        model.addAttribute("data", result);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", result.getTotalPages());
+        model.addAttribute("keyword", keyword);
+
+        return "khach_hang/list";
+    }
+
 }

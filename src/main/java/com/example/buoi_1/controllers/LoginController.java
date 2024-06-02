@@ -1,25 +1,21 @@
 package com.example.buoi_1.controllers;
 
+import com.example.buoi_1.entity.NhanVienEntity;
+import com.example.buoi_1.entity.UserSession;
+import com.example.buoi_1.repository.asm2.NhanVienRepo;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.example.buoi_1.entity.NhanVienEntity;
-import com.example.buoi_1.entity.UserSession;
-import com.example.buoi_1.repository.asm1.NhanVienRepo;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
 @Controller
 public class LoginController {
+    @Autowired
     private NhanVienRepo nvRepo;
-
-    public LoginController() {
-        this.nvRepo = new NhanVienRepo();
-    }
 
     @GetMapping("/login")
     public String showLoginForm(Model model) {
@@ -37,7 +33,7 @@ public class LoginController {
     public String showHome(Model model) {
         return "home";
     }
-    
+
     @GetMapping("/alert")
     public String showAlert(Model model) {
         return "alert";

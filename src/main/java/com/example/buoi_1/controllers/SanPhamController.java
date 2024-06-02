@@ -1,47 +1,41 @@
 package com.example.buoi_1.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+
+import com.example.buoi_1.entity.SanPhamEntity;
+import com.example.buoi_1.repository.asm2.SanPhamRepo;
 import jakarta.validation.Valid;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import com.example.buoi_1.entity.SanPhamEntity;
-import com.example.buoi_1.repository.asm1.SanPhamRepo;
-import jakarta.validation.Valid;
 
 
 @Controller
 @RequestMapping("san-pham")
 public class SanPhamController {
+    @Autowired
     private SanPhamRepo spRepo;
 
-    public SanPhamController()
-    {
-        this.spRepo = new SanPhamRepo();
-    }
-
-
-    /**
-     * @param model
-     * @return
-     */
     @GetMapping("/index")
-    public String index(@RequestParam(defaultValue = "1") int page, Model model) {
-        int pageSize = 2; // Số bản ghi hiển thị trên mỗi trang
-        List<SanPhamEntity> ds = this.spRepo.findAllPaging(page, pageSize);
-        int totalPages = this.spRepo.getTotalPages(pageSize);
+    public String index(@RequestParam(name = "limit", defaultValue = "10") int pageSize,
+                        @RequestParam(name = "page",defaultValue="1") int pageNumber , Model model) {
+        Pageable p = PageRequest.of(pageNumber - 1, pageSize); // Thay đổi ở đây
 
-        model.addAttribute("data", ds);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
+        Page<SanPhamEntity> page = this.spRepo.findAll(p);
+
+        model.addAttribute("data", page);
+        model.addAttribute("currentPage", pageNumber); // Thêm dòng này
+        model.addAttribute("totalPages", page.getTotalPages()); // Thêm dòng này
+
         return "san_pham/list";
     }
 
@@ -51,7 +45,7 @@ public class SanPhamController {
         return "san_pham/create";
     }
     @PostMapping("/store")
-    public String store( Model model,@Valid SanPhamEntity sanPhamEntity, BindingResult validate) {
+    public String store(Model model, @Valid SanPhamEntity sanPhamEntity, BindingResult validate) {
         if (validate.hasErrors()) {
             //Loi
             model.addAttribute("data", sanPhamEntity);
@@ -63,19 +57,19 @@ public class SanPhamController {
             model.addAttribute("errors", errors);
             return "san_pham/create";
         }
-        this.spRepo.create(sanPhamEntity);
+        this.spRepo.save(sanPhamEntity);
         return "redirect:/san-pham/index";
     }
 
     @GetMapping("delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
-        this.spRepo.deleteByIn(id);
+        this.spRepo.deleteById(id);
         return "redirect:/san-pham/index";
     }
 
     @GetMapping("edit/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model) {
-        SanPhamEntity sp = this.spRepo.findById(id);
+    public String edit(@PathVariable("id") SanPhamEntity sp, Model model) {
+//        SanPhamEntity sp = this.spRepo.findById(id).get();
         model.addAttribute("data", sp);
         return "san_pham/edit";
     }
@@ -92,24 +86,29 @@ public class SanPhamController {
             return "san_pham/edit";
         }
 
-        this.spRepo.update(sp);
+        this.spRepo.save(sp);
         return "redirect:/san-pham/index";
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam("keyword") String keyword,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "2") int pageSize,
-            Model model) {
-        List<SanPhamEntity> result = this.spRepo.findByNamePaging(keyword, page, pageSize);
-        int totalProducts = this.spRepo.getTotalProductsByName(keyword);
-        int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+    public String search(@RequestParam(defaultValue = "") String keyword,
+                         @RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "10") int size,
+                         Model model) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<SanPhamEntity> result;
+
+        if (keyword.isEmpty()) {
+            result = spRepo.findAll(pageable);
+        } else {
+            result = spRepo.findByTenContainingIgnoreCase(keyword, pageable);
+        }
 
         model.addAttribute("data", result);
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalPages", result.getTotalPages());
         model.addAttribute("keyword", keyword);
+
         return "san_pham/list";
     }
-
 }

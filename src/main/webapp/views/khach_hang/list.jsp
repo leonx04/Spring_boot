@@ -135,7 +135,7 @@
               <!-- Thêm form tìm kiếm -->
               <form action="/khach-hang/search" method="GET" class="mb-3">
                 <div class="input-group">
-                  <input type="text" class="form-control" name="keyword" placeholder="Nhập tên màu sắc">
+                  <input type="text" class="form-control" name="keyword" placeholder="Nhập tên khách hàng">
                   <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                 </div>
               </form>
@@ -153,16 +153,15 @@
                 </tr>
               </thead>
               <tbody>
-                <c:forEach items="${data}" var="khachHang" varStatus="items">
+                <c:forEach items="${data.content}" var="khachHang" varStatus="items">
                   <tr>
                     <td>${items.index + 1}</td>
                     <td>${khachHang.id}</td>
                     <td>${khachHang.ma}</td>
                     <td>${khachHang.ten}</td>
                     <td>${khachHang.sdt}</td>
-                    <td>
-                      ${khachHang.trangThai == 1 ? "Dang hoat dong" : "Ngung hoat
-                      dong"}
+                    <td class="${khachHang.trangThai == 1 ? 'text-success' : 'text-danger'}">
+                        ${khachHang.trangThai == 1 ? "Đang hoạt động" : "Ngừng hoạt động"}
                     </td>
                     <td class="text-nowrap">
                       <a href="/khach-hang/edit/${khachHang.id}" class="btn btn-warning">Sửa</a>
@@ -175,33 +174,52 @@
             <!-- Phân trang -->
             <nav aria-label="Page navigation">
               <ul class="pagination justify-content-center">
+                <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                  <a class="page-link" href="/khach-hang/search?page=${currentPage - 1}&limit=${data.size}&keyword=${keyword}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                  <a class="page-link" href="/khach-hang/search?page=1&limit=${data.size}&keyword=${keyword}" aria-label="First">
+                    Trang đầu
+                  </a>
+                </li>
+
+                <c:if test="${currentPage > 3}">
+                  <li class="page-item disabled"><a class="page-link">...</a></li>
+                </c:if>
+
                 <c:if test="${currentPage > 1}">
                   <li class="page-item">
-                    <a class="page-link"
-                      href="/khach-hang/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${currentPage - 1}">Previous</a>
+                    <a class="page-link" href="/khach-hang/search?page=${currentPage - 1}&limit=${data.size}&keyword=${keyword}">${currentPage - 1}</a>
                   </li>
                 </c:if>
 
-                <c:forEach begin="1" end="${totalPages}" var="i">
-                  <c:choose>
-                    <c:when test="${currentPage == i}">
-                      <li class="page-item active"><a class="page-link">${i}</a></li>
-                    </c:when>
-                    <c:otherwise>
-                      <li class="page-item">
-                        <a class="page-link"
-                          href="/khach-hang/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${i}">${i}</a>
-                      </li>
-                    </c:otherwise>
-                  </c:choose>
-                </c:forEach>
+                <li class="page-item active">
+                  <a class="page-link">${currentPage}</a>
+                </li>
 
                 <c:if test="${currentPage < totalPages}">
                   <li class="page-item">
-                    <a class="page-link"
-                      href="/khach-hang/${not empty keyword ? 'search?keyword=' += keyword += '&' : 'index?'}page=${currentPage + 1}">Next</a>
+                    <a class="page-link" href="/khach-hang/search?page=${currentPage + 1}&limit=${data.size}&keyword=${keyword}">${currentPage + 1}</a>
                   </li>
                 </c:if>
+
+                <c:if test="${currentPage < totalPages - 2}">
+                  <li class="page-item disabled"><a class="page-link">...</a></li>
+                </c:if>
+
+                <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                  <a class="page-link" href="/khach-hang/search?page=${totalPages}&limit=${data.size}&keyword=${keyword}" aria-label="Last">
+                    Trang cuối
+                  </a>
+                </li>
+
+                <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                  <a class="page-link" href="/khach-hang/search?page=${currentPage + 1}&limit=${data.size}&keyword=${keyword}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
               </ul>
             </nav>
           </div>

@@ -137,16 +137,7 @@
           <!-- Tiêu đề của form -->
 
           <form action="/nhan-vien/store" method="post">
-            <div class="mt-2">
-              <label class="form-lablel">ID Nhân viên</label>
-              <input type="text" class="form-control" placeholder="Vui lòng nhập ID Nhân viên" name="id"
-                value="${data.id}" />
-              <div class="mt-2">
-                <c:if test="${not empty errors.id}">
-                  <div class="alert alert-danger  text-center">${errors.id}</div>
-                </c:if>
-              </div>
-            </div>
+            <h2 class="text-center">Thêm mới</h2>
 
             <div class="mt-2">
               <label class="form-lablel">Mã Nhân viên</label>

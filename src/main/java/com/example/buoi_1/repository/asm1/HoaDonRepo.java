@@ -11,11 +11,11 @@ import com.example.buoi_1.entity.HoaDonEntity;
 public class HoaDonRepo {
     private List<HoaDonEntity> ds;
 
-    public HoaDonRepo() {
-        this.ds = new ArrayList<>();
-        this.ds.add(new HoaDonEntity(1, 1, 1, LocalDate.of(2023, 5, 1), 1));
-        this.ds.add(new HoaDonEntity(2, 2, 2, LocalDate.of(2023, 5, 2), 0));
-    }
+//    public HoaDonRepo() {
+//        this.ds = new ArrayList<>();
+//        this.ds.add(new HoaDonEntity(1, 1, 1, LocalDate.of(2023, 5, 1), 1));
+//        this.ds.add(new HoaDonEntity(2, 2, 2, LocalDate.of(2023, 5, 2), 0));
+//    }
 
     public List<HoaDonEntity> findAllPaging(int page, int pageSize) {
         int start = (page - 1) * pageSize;
