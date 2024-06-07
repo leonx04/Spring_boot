@@ -107,27 +107,4 @@ public class KhachHangController {
         return "khach_hang/list";
     }
 
-    @GetMapping("/sort")
-    public String sort(@RequestParam(defaultValue = "id,asc") String[] sort,
-                       @RequestParam(defaultValue = "") String keyword,
-                       @RequestParam(defaultValue = "1") int page,
-                       @RequestParam(defaultValue = "10") int size,
-                       Model model) {
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort));
-        Page<KhachHangEntity> result;
-
-        if (keyword.isEmpty()) {
-            result = khRepo.findAll(pageable);
-        } else {
-            result = khRepo.findByTenContainingIgnoreCase(keyword, pageable);
-        }
-
-        model.addAttribute("data", result);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", result.getTotalPages());
-        model.addAttribute("keyword", keyword);
-
-        return "khach_hang/list";
-    }
-
 }

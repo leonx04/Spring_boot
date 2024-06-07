@@ -1,4 +1,5 @@
 <%@page language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
   <html>
 
   <head>
@@ -133,7 +134,6 @@
           box-shadow: 0 0 10px rgba(17, 12, 12, 0.1);
           backdrop-filter: blur(5px);
         ">
-        <!-- Tiêu đề của form -->
 
         <form action="/mau-sac/update/${data.id}" method="post">
           <h2 class="text-center mt-2">Cập nhật màu sắc</h2>
@@ -143,7 +143,7 @@
               value="${data.id}" disabled />
           </div>
           <c:if test="${not empty errors['id']}">
-            <small class="alert alert-danger mt-2 text-center">${errors['id']}</small>
+            <div class="alert alert-danger mt-2"><small class=" text-center">${errors['id']}</small></div>
           </c:if>
           <div class="mt-2">
             <label class="form-lablel">Mã màu sắc</label>
@@ -151,7 +151,7 @@
               value="${data.ma}" />
           </div>
           <c:if test="${not empty errors['ma']}">
-            <small class="alert alert-danger mt-2 text-center">${errors['ma']}</small>
+            <div class="alert alert-danger mt-2"><small class=" text-center">${errors['ma']}</small></div>
           </c:if>
           <div class="mt-2">
             <label class="form-label">Tên màu sắc</label>
@@ -159,7 +159,7 @@
               value="${data.ten}" />
           </div>
           <c:if test="${not empty errors['ten']}">
-            <small class="alert alert-danger mt-2 text-center">${errors['ten']}</small>
+            <div class="alert alert-danger mt-2"><small class=" text-center">${errors['ten']}</small></div>
           </c:if>
           <div class="mt-2">
             <label class="form-label">Trạng thái</label>
@@ -169,7 +169,7 @@
             </select>
           </div>
           <c:if test="${not empty errors['trangThai']}">
-            <small class="alert alert-danger mt-2 text-center">${errors['trangThai']}</small>
+            <div class="alert alert-danger mt-2"><small class=" text-center">${errors['trangThai']}</small></div>
           </c:if>
           <div class="mt-2 text-center">
             <button type="submit" class="btn btn-warning">Cập nhật</button>

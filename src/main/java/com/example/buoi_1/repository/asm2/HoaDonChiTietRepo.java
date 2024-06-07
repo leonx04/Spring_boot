@@ -10,6 +10,13 @@ import org.springframework.data.repository.query.Param;
 public interface HoaDonChiTietRepo extends JpaRepository<HoaDonChiTietEntity, Integer> {
     //    @Query("SELECT hdct FROM HoaDonChiTietEntity hdct WHERE hdct.idHD = :idHoaDon")
 //    Page<HoaDonChiTietEntity> findByIdHoaDon(@Param("idHoaDon") Integer idHoaDon, Pageable pageable);
-    @Query("SELECT DISTINCT hdct FROM HoaDonChiTietEntity hdct WHERE hdct.idHD = :idHoaDon")
-    Page<HoaDonChiTietEntity> findDistinctByIdHoaDon(@Param("idHoaDon") Integer idHoaDon, Pageable pageable);
+//    @Query("SELECT DISTINCT hdct FROM HoaDonChiTietEntity hdct WHERE hdct.idHD = :idHoaDon")
+//    Page<HoaDonChiTietEntity> findDistinctByIdHoaDon(@Param("idHoaDon") Integer idHoaDon, Pageable pageable);
+
+//    @Query("SELECT DISTINCT hdct FROM HoaDonChiTietEntity hdct WHERE hdct.idHD = :idHoaDon ORDER BY hdct.id ASC")
+//    Page<HoaDonChiTietEntity> findDistinctByIdHoaDonOrderByIdAsc(@Param("idHoaDon") Integer idHoaDon, Pageable pageable);
+
+    @Query("SELECT DISTINCT hdct FROM HoaDonChiTietEntity hdct JOIN FETCH hdct.hoaDon hd JOIN FETCH hdct.sanPhamChiTiet spct WHERE hdct.hoaDon.id = :idHoaDon ORDER BY hdct.id ASC")
+    Page<HoaDonChiTietEntity> findDistinctByIdHoaDonOrderByIdAsc(@Param("idHoaDon") Integer idHoaDon, Pageable pageable);
+    Page<HoaDonChiTietEntity> findAllByOrderByIdAsc(Pageable pageable);
 }

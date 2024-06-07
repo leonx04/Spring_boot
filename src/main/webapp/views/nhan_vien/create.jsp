@@ -145,7 +145,7 @@
                 value="${data.ma}" />
               <div class="mt-2">
                 <c:if test="${not empty errors.ma}">
-                  <div class="alert alert-danger text-center">${errors.ma}</div>
+                  <div class="alert alert-danger mt-2"><small class=" text-center">${errors.ma} </small></div>
                 </c:if>
               </div>
             </div>

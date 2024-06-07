@@ -144,7 +144,7 @@
               <input type="text" class="form-control" placeholder="Vui lòng nhập mã kích thước" name="ma"
                 value="${data.ma}" />
               <c:if test="${not empty errors['ma']}">
-                <small class="alert alert-danger mt-2 text-center">${errors['ma']}</small>
+                <div class="alert alert-danger mt-2"><small class=" text-center">${errors['ma']}</small></div>
               </c:if>
             </div>
 
@@ -153,7 +153,7 @@
               <input type="text" class="form-control" placeholder="Vui lòng nhập tên kích thước" name="ten"
                 value="${data.ten}" />
               <c:if test="${not empty errors['ten']}">
-                <small class="alert alert-danger mt-2 text-center">${errors['ten']}</small>
+                <div class="alert alert-danger mt-2"><small class=" text-center">${errors['ten']}</small></div>
               </c:if>
             </div>
 
@@ -164,7 +164,7 @@
                 <option value="0" ${data.trangThai==0 ? "selected" : "" }>Không hoạt động</option>
               </select>
               <c:if test="${not empty errors['trangThai']}">
-                <small class="alert alert-danger mt-2 text-center">${errors['trangThai']}</small>
+                <div class="alert alert-danger mt-2"><small class=" text-center">${errors['trangThai']}</small></div>
               </c:if>
             </div>
             <div class="mt-2 text-center">

@@ -145,18 +145,33 @@
                             </div>
                             <div class="mt-2">
                                 <label class="form-label">Khách hàng</label>
-                                <input type="text" class="form-control" placeholder="Vui lòng nhập tên khách hàng"
-                                    name="khachHang" value="${data.khachHang != null ? data.khachHang : ''}" />
+                                <select class="form-control" name="khachHang">
+                                    <option value="">Chọn</option>
+                                    <c:forEach items="${kh}" var="khachHang">
+                                        <option value="${khachHang.id}" ${data.khachHang.id == khachHang.id ? 'selected' : ''}>${khachHang.ten}</option>
+                                    </c:forEach>
+                                </select>
                                 <c:if test="${not empty errors['khachHang']}">
-                                    <small class="alert alert-danger mt-2 text-center" >${errors['khachHang']}</small>
+                                    <small class="alert alert-danger mt-2 text-center">${errors['khachHang']}</small>
                                 </c:if>
                             </div>
                             <div class="mt-2">
                                 <label class="form-label">Nhân viên</label>
-                                <input type="text" class="form-control" placeholder="Vui lòng nhập tên nhân viên"
-                                    name="nhanVien" value="${data.nhanVien != null ? data.nhanVien : ''}" />
+                                <select class="form-control" name="nhanVien">
+                                    <option value="">Chọn</option>
+                                    <c:forEach items="${nv}" var="nhanVien">
+                                        <option value="${nhanVien.id}" ${data.nhanVien.id == nhanVien.id ? 'selected' : ''}>${nhanVien.ten}</option>
+                                    </c:forEach>
+                                </select>
                                 <c:if test="${not empty errors['nhanVien']}">
                                     <small class="alert alert-danger mt-2 text-center">${errors['nhanVien']}</small>
+                                </c:if>
+                            </div>
+                            <div class="mt-2">
+                                <label class="form-label">Ngày mua hàng</label>
+                                <input type="date" class="form-control" name="ngayMua" value="${data.ngayMua}" />
+                                <c:if test="${not empty errors['ngayMua']}">
+                                    <small class="alert alert-danger mt-2 text-center">${errors['ngayMua']}</small>
                                 </c:if>
                             </div>
                             <div class="mt-2">

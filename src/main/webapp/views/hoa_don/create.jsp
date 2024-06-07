@@ -148,17 +148,24 @@
                             </div>
                             <div class="mt-2">
                                 <label class="form-label">Khách hàng</label>
-                                <input type="text" class="form-control" placeholder="Vui lòng nhập tên khách hàng"
-                                    name="khachHang" value="${data.khachHang}" />
+                                <select class="form-control" name="khachHang">
+                                    <option value="">Chọn</option>
+                                    <c:forEach items="${kh}" var="khachHang">
+                                        <option value="${khachHang.id}">${khachHang.ten}</option>
+                                    </c:forEach>
+                                </select>
                                 <c:if test="${not empty errors['khachHang']}">
                                     <small style="color: red;">${errors['khachHang']}</small>
                                 </c:if>
                             </div>
-
                             <div class="mt-2">
                                 <label class="form-label">Nhân viên</label>
-                                <input type="text" class="form-control" placeholder="Vui lòng nhập tên nhân viên"
-                                    name="nhanVien" value="${data.nhanVien}" />
+                                <select class="form-control" name="nhanVien">
+                                    <option value="">Chọn</option>
+                                    <c:forEach items="${nv}" var="nhanVien">
+                                        <option value="${nhanVien.id}">${nhanVien.ten}</option>
+                                    </c:forEach>
+                                </select>
                                 <c:if test="${not empty errors['nhanVien']}">
                                     <small style="color: red;">${errors['nhanVien']}</small>
                                 </c:if>

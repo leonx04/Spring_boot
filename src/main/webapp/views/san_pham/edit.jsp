@@ -1,5 +1,6 @@
 <%@page language="java" pageEncoding="UTF-8" %>
   <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <html>
 
     <head>
@@ -137,31 +138,50 @@
           <!-- Tiêu đề của form -->
 
           <form action="/san-pham/update/${data.id}" method="post">
-            <div class="mt-2">
-              <label class="form-lablel">ID sản phẩm</label>
-              <input type="text" class="form-control" placeholder="Vui lòng nhập ID sản phẩm" name="id" disabled
-                value="${data.id}" />
-              <span class="alert alert-danger mt-2 text-center">${errors.id}</span>
-            </div>
+            <h2 class="text-center mt-2">Cập nhật Sản phẩm</h2>
             <div class="mt-2">
               <label class="form-lablel">Mã sản phẩm</label>
-              <input type="text" class="form-control" placeholder="Vui lòng nhập mã sản phẩm" name="ma"
-                value="${data.ma}" />
-              <span class="alert alert-danger mt-2 text-center">${errors.ma}</span>
+              <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Vui lòng nhập mã sản phẩm"
+                      name="ma"
+                      value="${data.ma}"
+              />
+              <c:if test="${not empty errors['ma']}">
+                <div class="alert alert-danger mt-2">
+                  <small class="text-center">${errors['ma']}</small>
+                </div>
+              </c:if>
             </div>
+
             <div class="mt-2">
               <label class="form-label">Tên sản phẩm</label>
-              <input type="text" class="form-control" placeholder="Vui lòng nhập tên sản phẩm" name="ten"
-                value="${data.ten}" />
-              <span class="alert alert-danger mt-2 text-center">${errors.ten}</span>
+              <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Vui lòng nhập tên sản phẩm"
+                      name="ten"
+                      value="${data.ten}"
+              />
+              <c:if test="${not empty errors['ten']}">
+                <div class="alert alert-danger mt-2">
+                  <small class="text-center">${errors['ten']}</small>
+                </div>
+              </c:if>
             </div>
+
             <div class="mt-2">
               <label class="form-label">Trạng thái</label>
               <select class="form-control" name="trangThai">
                 <option value="1" ${data.trangThai==1 ? "selected" : "" }>Hoạt động</option>
                 <option value="0" ${data.trangThai==0 ? "selected" : "" }>Không hoạt động</option>
               </select>
-              <span class="alert alert-danger mt-2 text-center">${errors.trangThai}</span>
+              <c:if test="${not empty errors['trangThai']}">
+                <div class="alert alert-danger mt-2">
+                  <small class="text-center">${errors['trangThai']}</small>
+                </div>
+              </c:if>
             </div>
             <div class="mt-2 text-center">
               <button type="submit" class="btn btn-warning">Cập nhật</button>

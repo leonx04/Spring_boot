@@ -79,7 +79,6 @@ public class MauSacController {
             model.addAttribute("errors", errors);
             return "mau_sac/edit";
         }
-
         this.msRepo.save(ms);
         return "redirect:/mau-sac/index";
     }

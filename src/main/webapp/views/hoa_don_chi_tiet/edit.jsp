@@ -144,17 +144,24 @@
                                 </c:if>
                             </div>
                             <div class="mt-2">
-                                <label class="form-label">ID hóa đơn</label>
-                                <input type="text" class="form-control" placeholder="Vui lòng nhập ID hóa đơn"
-                                    name="idHD" value="${data.idHD}" />
+                                <label class="form-label">Hóa đơn</label>
+                                <select class="form-control" name="idHD">
+                                    <c:forEach items="${listHoaDon}" var="hoaDon">
+                                        <option value="${hoaDon.id}" ${data.hoaDon.id == hoaDon.id ? 'selected' : ''}>${hoaDon.id}</option>
+                                    </c:forEach>
+                                </select>
                                 <c:if test="${not empty errors['idHD']}">
                                     <small class="alert alert-danger mt-2 text-center">${errors['idHD']}</small>
                                 </c:if>
                             </div>
+
                             <div class="mt-2">
-                                <label class="form-label">ID sản phẩm chi tiết</label>
-                                <input type="text" class="form-control" placeholder="Vui lòng nhập ID sản phẩm chi tiết"
-                                    name="idSPCT" value="${data.idSPCT}" />
+                                <label class="form-label">Sản phẩm chi tiết</label>
+                                <select class="form-control" name="idSPCT">
+                                    <c:forEach items="${listSanPhamChiTiet}" var="sanPhamChiTiet">
+                                        <option value="${sanPhamChiTiet.id}" ${data.sanPhamChiTiet.id == sanPhamChiTiet.id ? 'selected' : ''}>${sanPhamChiTiet.id} - ${sanPhamChiTiet.ma}</option>
+                                    </c:forEach>
+                                </select>
                                 <c:if test="${not empty errors['idSPCT']}">
                                     <small class="alert alert-danger mt-2 text-center">${errors['idSPCT']}</small>
                                 </c:if>

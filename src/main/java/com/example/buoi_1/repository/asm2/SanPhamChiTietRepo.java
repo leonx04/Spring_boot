@@ -13,4 +13,6 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTietEntity, 
 
     @Query("SELECT spct FROM SanPhamChiTietEntity spct JOIN spct.kichThuoc kt JOIN spct.mauSac ms WHERE spct.sp.id = :idSanPham")
     Page<SanPhamChiTietEntity> findBySpId(@Param("idSanPham") Integer idSanPham, Pageable pageable);
+
+
 }

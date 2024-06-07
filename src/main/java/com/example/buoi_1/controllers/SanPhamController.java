@@ -33,8 +33,8 @@ public class SanPhamController {
         Page<SanPhamEntity> page = this.spRepo.findAll(p);
 
         model.addAttribute("data", page);
-        model.addAttribute("currentPage", pageNumber); // Thêm dòng này
-        model.addAttribute("totalPages", page.getTotalPages()); // Thêm dòng này
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", page.getTotalPages());
 
         return "san_pham/list";
     }
@@ -68,8 +68,8 @@ public class SanPhamController {
     }
 
     @GetMapping("edit/{id}")
-    public String edit(@PathVariable("id") SanPhamEntity sp, Model model) {
-//        SanPhamEntity sp = this.spRepo.findById(id).get();
+    public String edit(@PathVariable("id") Integer id, Model model) {
+        SanPhamEntity sp = this.spRepo.findById(id).get();
         model.addAttribute("data", sp);
         return "san_pham/edit";
     }
@@ -85,7 +85,6 @@ public class SanPhamController {
             model.addAttribute("errors", errors);
             return "san_pham/edit";
         }
-
         this.spRepo.save(sp);
         return "redirect:/san-pham/index";
     }

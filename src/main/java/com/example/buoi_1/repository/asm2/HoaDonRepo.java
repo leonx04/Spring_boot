@@ -13,7 +13,6 @@ public interface HoaDonRepo extends JpaRepository<HoaDonEntity, Integer> {
     @Query("SELECT hd FROM HoaDonEntity hd JOIN hd.nhanVien nv WHERE nv.id = :idNhanVien")
     Page<HoaDonEntity> findByIdNV(@Param("idNhanVien") Integer idNhanVien, Pageable pageable);
 
-    // Thêm phương thức tìm kiếm theo khách hàng
     @Query("SELECT hd FROM HoaDonEntity hd JOIN hd.khachHang kh WHERE kh.id = :idKhachHang")
     Page<HoaDonEntity> findByIdKH(@Param("idKhachHang") Integer idKhachHang, Pageable pageable);
 

@@ -26,12 +26,20 @@ public class HoaDonChiTietEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
-    @Column(name = "IdHoaDon")
-    @NotNull(message = "ID hóa đơn không được để trống")
-    private Integer idHD;
-    @Column(name = "IdSPCT")
-    @NotNull(message = "ID sản phẩm chi tiết không được để trống")
-    private Integer idSPCT;
+//    @Column(name = "IdHoaDon")
+//    @NotNull(message = "ID hóa đơn không được để trống")
+//    private Integer idHD;
+//    @Column(name = "IdSPCT")
+//    @NotNull(message = "ID sản phẩm chi tiết không được để trống")
+//    private Integer idSPCT;
+
+    @ManyToOne
+    @JoinColumn(name = "IdHoaDon", referencedColumnName = "ID")
+    private HoaDonEntity hoaDon;
+
+    @ManyToOne
+    @JoinColumn(name = "IdSPCT", referencedColumnName = "ID")
+    private SanPhamChiTietEntity sanPhamChiTiet;
     @Column(name = "SoLuong")
     @NotNull(message = "Số lượng không được để trống")
     private Integer soLuong;

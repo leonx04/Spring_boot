@@ -8,6 +8,7 @@
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
             <!-- Latest compiled JavaScript -->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
         </head>
 
         <body style="background-image: url('https://bizweb.dktcdn.net/100/330/208/files/hinh-nen-may-tinh-4k-thien-nhien-3.jpg?v=1652432263586');
@@ -127,51 +128,45 @@
                 <div class="login-container p-2 boder-1 rounded-3"
                     style="max-width: 800px; width: 100%; padding: 20px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(17, 12, 12, 0.1); backdrop-filter: blur(5px);">
                     <form action="/san-pham-chi-tiet/update/${data.id}" method="post">
-                        <h2 class="text-center mt-2">Thêm mới sản phẩm chi tiết</h2>
-                        <div class="mt-2">
-                            <label class="form-lablel">ID sản phẩm chi tiết</label>
-                            <input type="text" class="form-control" placeholder="Vui lòng nhập id sản phẩm" name="id"
-                                value="${data.id}" readonly />
-
-                        </div>
+                        <h2 class="text-center mt-2">Cập nhật sản phẩm chi tiết</h2>
                         <div class="mt-2">
                             <label class="form-lablel">Mã sản phẩm chi tiết</label>
                             <input type="text" class="form-control" placeholder="Vui lòng nhập mã sản phẩm chi tiết"
                                 name="ma" value="${data.ma}" />
                             <c:if test="${not empty errors['ma']}">
-                                <small class="alert alert-danger mt-2 text-center">${errors['ma']}</small>
+                                <div class="alert alert-danger mt-2"><small class=" text-center">${errors['ma']}</small></div>
                             </c:if>
                         </div>
                         <div class="mt-2">
-                            <label class="form-lablel">Sản phẩm</label>
-                            <input type="text" class="form-control" placeholder="Vui lòng nhập id sản phẩm" name="idSP"
-                                value="${data.idSP}" />
-                            <c:if test="${not empty errors['idSP']}">
-                                <small class="alert alert-danger mt-2 text-center">${errors['idSP']}</small>
-                            </c:if>
+                            <label class="form-label">Sản phẩm</label>
+                            <select class="form-control" name="sp">
+                                <c:forEach items="${listSanPham}" var="sanPham">
+                                    <option value="${sanPham.id}" ${data.sp.id == sanPham.id ? 'selected' : ''}>${sanPham.ten}</option>
+                                </c:forEach>
+                            </select>
                         </div>
                         <div class="mt-2">
-                            <label class="form-label">Kích thước </label>
-                            <input type="text" class="form-control" placeholder="Vui lòng nhập ID kích thước"
-                                name="idKT" value="${data.idKT}" />
-                            <c:if test="${not empty errors['idKT']}">
-                                <small class="alert alert-danger mt-2 text-center">${errors['idKT']}</small>
-                            </c:if>
+                            <label class="form-label">Kích thước</label>
+                            <select class="form-control" name="kichThuoc">
+                                <c:forEach items="${listKichThuoc}" var="kichThuoc">
+                                    <option value="${kichThuoc.id}" ${data.kichThuoc.id == kichThuoc.id ? 'selected' : ''}>${kichThuoc.ten}</option>
+                                </c:forEach>
+                            </select>
                         </div>
                         <div class="mt-2">
-                            <label class="form-label">Màu sắc </label>
-                            <input type="text" class="form-control" placeholder="Vui lòng nhập ID màu sắc" name="idMS"
-                                value="${data.idMS}" />
-                            <c:if test="${not empty errors['idMS']}">
-                                <small class="alert alert-danger mt-2 text-center">${errors['idMS']}</small>
-                            </c:if>
+                            <label class="form-label">Màu sắc</label>
+                            <select class="form-control" name="mauSac">
+                                <c:forEach items="${listMauSac}" var="mauSac">
+                                    <option value="${mauSac.id}" ${data.mauSac.id == mauSac.id ? 'selected' : ''}>${mauSac.ten}</option>
+                                </c:forEach>
+                            </select>
                         </div>
                         <div class="mt-2">
                             <label class="form-label">Số lượng </label>
                             <input type="text" class="form-control" placeholder="Vui lòng nhập số lượng"
                                 name="soLuong" value="${data.soLuong}" />
                             <c:if test="${not empty errors['soLuong']}">
-                                <small class="alert alert-danger mt-2 text-center">${errors['soLuong']}</small>
+                                <div class="alert alert-danger mt-2"><small class=" text-center">${errors['soLuong']}</small></div>
                             </c:if>
                         </div>
                         <div class="mt-2">
@@ -179,7 +174,7 @@
                             <input type="text" class="form-control" placeholder="Vui lòng nhập đơn giá" name="donGia"
                                 value="${data.donGia}" />
                             <c:if test="${not empty errors['donGia']}">
-                                <small class="alert alert-danger mt-2 text-center">${errors['donGia']}</small>
+                                <div class="alert alert-danger mt-2"><small class=" text-center">${errors['donGia']}</small></div>
                             </c:if>
                         </div>
                         <div class="mt-2">

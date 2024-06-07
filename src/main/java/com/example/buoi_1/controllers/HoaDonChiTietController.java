@@ -1,7 +1,11 @@
 package com.example.buoi_1.controllers;
 
 import com.example.buoi_1.entity.HoaDonChiTietEntity;
+import com.example.buoi_1.entity.HoaDonEntity;
+import com.example.buoi_1.entity.SanPhamChiTietEntity;
 import com.example.buoi_1.repository.asm2.HoaDonChiTietRepo;
+import com.example.buoi_1.repository.asm2.HoaDonRepo;
+import com.example.buoi_1.repository.asm2.SanPhamChiTietRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -20,6 +25,11 @@ import java.util.Map;
 public class HoaDonChiTietController {
     @Autowired
     private HoaDonChiTietRepo hdctRepo;
+    @Autowired
+    private HoaDonRepo hoaDonRepo;
+
+    @Autowired
+    private SanPhamChiTietRepo spctRepo;
 
     @GetMapping("/index")
     public String index(@RequestParam(name = "limit", defaultValue = "10") int pageSize,
@@ -29,15 +39,10 @@ public class HoaDonChiTietController {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         Page<HoaDonChiTietEntity> page;
 
-//        if (idHoaDon != null) {
-//            page = hdctRepo.findByIdHoaDon(idHoaDon, pageable);
-//        } else {
-//            page = hdctRepo.findAll(pageable);
-//        }
         if (idHoaDon != null) {
-            page = hdctRepo.findDistinctByIdHoaDon(idHoaDon, pageable);
+            page = hdctRepo.findDistinctByIdHoaDonOrderByIdAsc(idHoaDon, pageable);
         } else {
-            page = hdctRepo.findAll(pageable);
+            page = hdctRepo.findAllByOrderByIdAsc(pageable);
         }
 
         model.addAttribute("data", page);
@@ -70,6 +75,15 @@ public class HoaDonChiTietController {
     public String edit(@PathVariable("id") Integer id, Model model) {
         HoaDonChiTietEntity hdct = hdctRepo.findById(id).orElseThrow();
         model.addAttribute("data", hdct);
+
+        // Thêm danh sách Hóa đơn
+        List<HoaDonEntity> listHoaDon = hoaDonRepo.findAll();
+        model.addAttribute("listHoaDon", listHoaDon);
+
+        // Thêm danh sách Sản phẩm chi tiết
+        List<SanPhamChiTietEntity> listSanPhamChiTiet = spctRepo.findAll();
+        model.addAttribute("listSanPhamChiTiet", listSanPhamChiTiet);
+
         return "hoa_don_chi_tiet/edit";
     }
 

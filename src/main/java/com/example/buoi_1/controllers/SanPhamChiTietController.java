@@ -1,7 +1,11 @@
 package com.example.buoi_1.controllers;
 
+import com.example.buoi_1.entity.KichThuocEntity;
+import com.example.buoi_1.entity.MauSacEntity;
 import com.example.buoi_1.entity.SanPhamChiTietEntity;
 import com.example.buoi_1.entity.SanPhamEntity;
+import com.example.buoi_1.repository.asm2.KichThuocRepo;
+import com.example.buoi_1.repository.asm2.MauSacRepo;
 import com.example.buoi_1.repository.asm2.SanPhamChiTietRepo;
 import com.example.buoi_1.repository.asm2.SanPhamRepo;
 import jakarta.validation.Valid;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("san-pham-chi-tiet")
@@ -25,6 +30,12 @@ public class SanPhamChiTietController {
 
     @Autowired
     private SanPhamRepo spRepo;
+
+    @Autowired
+    private MauSacRepo mauSacRepo;
+
+    @Autowired
+    private KichThuocRepo kichThuocRepo;
 
     @GetMapping("/index")
     public String index(@RequestParam(name = "limit", defaultValue = "10") int pageSize,
@@ -52,7 +63,15 @@ public class SanPhamChiTietController {
 
     @GetMapping("/create")
     public String create(Model model) {
+        List<MauSacEntity> listMauSac = mauSacRepo.findAll();
+        List<KichThuocEntity> listKichThuoc = kichThuocRepo.findAll();
+        List<SanPhamEntity> listSanPham = spRepo.findAll();
+
+        model.addAttribute("listMauSac", listMauSac);
+        model.addAttribute("listKichThuoc", listKichThuoc);
+        model.addAttribute("listSanPham", listSanPham);
         model.addAttribute("data", new SanPhamChiTietEntity());
+
         return "san_pham_chi_tiet/create";
     }
 
@@ -62,6 +81,16 @@ public class SanPhamChiTietController {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             model.addAttribute("errors", errors);
+
+            // Thêm dữ liệu cho các danh sách sản phẩm, màu sắc và kích thước
+            List<MauSacEntity> listMauSac = mauSacRepo.findAll();
+            List<KichThuocEntity> listKichThuoc = kichThuocRepo.findAll();
+            List<SanPhamEntity> listSanPham = spRepo.findAll();
+
+            model.addAttribute("listMauSac", listMauSac);
+            model.addAttribute("listKichThuoc", listKichThuoc);
+            model.addAttribute("listSanPham", listSanPham);
+
             return "san_pham_chi_tiet/create";
         }
         spctRepo.save(spct);
@@ -71,7 +100,16 @@ public class SanPhamChiTietController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
         SanPhamChiTietEntity spct = spctRepo.findById(id).orElseThrow();
+        List<SanPhamEntity> listSanPham = spRepo.findAll();
+//                .stream().limit(30).collect(Collectors.toList());
+        List<KichThuocEntity> listKichThuoc = kichThuocRepo.findAll();
+        List<MauSacEntity> listMauSac = mauSacRepo.findAll();
+
         model.addAttribute("data", spct);
+        model.addAttribute("listSanPham", listSanPham);
+        model.addAttribute("listKichThuoc", listKichThuoc);
+        model.addAttribute("listMauSac", listMauSac);
+
         return "san_pham_chi_tiet/edit";
     }
 
@@ -92,4 +130,6 @@ public class SanPhamChiTietController {
         spctRepo.deleteById(id);
         return "redirect:/san-pham-chi-tiet/index";
     }
+
+
 }

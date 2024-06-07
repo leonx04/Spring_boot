@@ -7,9 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface NhanVienRepo extends JpaRepository<NhanVienEntity, Integer> {
     Page<NhanVienEntity> findByTenContainingIgnoreCase(String keyword, Pageable pageable);
 
     @Query("SELECT nv FROM NhanVienEntity nv WHERE nv.tenDN = :tenDN AND nv.matKhau = :matKhau")
     NhanVienEntity findByTenDNAndMatKhau(@Param("tenDN") String tenDN, @Param("matKhau") String matKhau);
+
+    List<NhanVienEntity> findTop1000ByOrderByIdAsc();
 }

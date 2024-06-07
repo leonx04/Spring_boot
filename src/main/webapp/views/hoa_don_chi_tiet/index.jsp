@@ -164,8 +164,8 @@
                                     <tr>
                                         <td>${loop.index + 1}</td>
                                         <td>${hdct.id}</td>
-                                        <td>${hdct.idHD}</td>
-                                        <td>${hdct.idSPCT}</td>
+                                        <td>${hdct.hoaDon.id}</td>
+                                        <td>${hdct.sanPhamChiTiet.id}</td>
                                         <td>${hdct.soLuong}</td>
 <%--                                        <td>${hdct.donGia}</td>--%>
                                         <td><fmt:formatNumber value="${hdct.donGia}" type="currency" currencySymbol="đ" maxFractionDigits="0"/></td>

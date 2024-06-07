@@ -68,8 +68,14 @@ public class HoaDonController {
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("data", new HoaDonEntity());
+        List<NhanVienEntity> dsnv = nvRepo.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        List<KhachHangEntity> dskh = khRepo.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        model.addAttribute("nv", dsnv);
+        model.addAttribute("kh", dskh);
         return "hoa_don/create";
     }
+
+
 
     @PostMapping("/store")
     public String store(@Valid @ModelAttribute("data") HoaDonEntity hoaDon, BindingResult bindingResult, Model model) {
@@ -87,6 +93,10 @@ public class HoaDonController {
     public String edit(@PathVariable("id") Integer id, Model model) {
         HoaDonEntity hoaDon = hdRepo.findById(id).orElseThrow();
         model.addAttribute("data", hoaDon);
+        List<NhanVienEntity> dsnv = nvRepo.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        List<KhachHangEntity> dskh = khRepo.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+        model.addAttribute("nv", dsnv);
+        model.addAttribute("kh", dskh);
         return "hoa_don/edit";
     }
 
@@ -96,8 +106,23 @@ public class HoaDonController {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             model.addAttribute("errors", errors);
+            List<NhanVienEntity> dsnv = nvRepo.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+            List<KhachHangEntity> dskh = khRepo.findAll(Sort.by(Sort.Direction.ASC, "ten"));
+            model.addAttribute("nv", dsnv);
+            model.addAttribute("kh", dskh);
             return "hoa_don/edit";
         }
+
+        // Tìm đối tượng KhachHangEntity tương ứng
+        Integer khachHangId = hoaDon.getKhachHang().getId();
+        KhachHangEntity khachHang = khRepo.findById(khachHangId).orElse(null);
+        hoaDon.setKhachHang(khachHang); // Gán đối tượng KhachHangEntity cho thuộc tính khachHang
+
+        // Tìm đối tượng NhanVienEntity tương ứng (nếu cần)
+        Integer nhanVienId = hoaDon.getNhanVien().getId();
+        NhanVienEntity nhanVien = nvRepo.findById(nhanVienId).orElse(null);
+        hoaDon.setNhanVien(nhanVien);
+
         hdRepo.save(hoaDon);
         return "redirect:/hoa-don/index";
     }
