@@ -34,7 +34,7 @@ Whether you're new to Spring Boot or looking to reinforce your knowledge, this p
 1. Clone the repository:
    ```
    git clone https://github.com/leonx04/Spring_boot
-   cd Buoi_1
+   cd Spring_boot
    ```
 
 ## 🛠 Usage
@@ -71,7 +71,7 @@ The application will start and be accessible at [http://localhost:8080](http://l
 For more information on using and configuring Spring Boot, please refer to the [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/).
 
 ## 🤝 Contributing
-We welcome contributions to Buoi_1! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+We welcome contributions to Spring_boot! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## 📝 License
 This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
